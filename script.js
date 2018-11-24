@@ -57,19 +57,54 @@
  * - 컨텐트 페이지의 #userInput 입력한 값이 변경되었을 '때'
  * - 컨텐트 페이지에 몇개의 단어가 등장하는지 계산해보자.
  */
-document.querySelector('#userInput').addEventListener('change', function () {
-  var input = document.querySelector('#userInput').value;
+// document.querySelector('#userInput').addEventListener('change', function () {
+//   var input = document.querySelector('#userInput').value;
 
+//   chrome.tabs.executeScript({
+//     code: 'document.querySelector("body").innerText'
+//   }, function (result) {
+//     var bodyText = result[0];
+//     var bodyNum = bodyText.split(' ').length;
+//     var myNum = bodyText.match(new RegExp('\\b(' + input + ')\\b', 'gi')).length;
+
+//     var per = myNum / bodyNum * 100;
+//     per = per.toFixed(2);
+
+//     document.querySelector('#result').innerText = myNum + '/' + bodyNum + '(' + per + '%)';
+//   });
+// });
+
+
+/**
+ * 5단계
+ * - Chrome Storage 에 사용자의 입력값을 저장한다.
+ * - 저장된 값을 가져온다.
+ */
+function matching(input) {
   chrome.tabs.executeScript({
-    code: 'document.querySelector("body").innerText;'
+    code: 'document.querySelector("body").innerText'
   }, function (result) {
     var bodyText = result[0];
     var bodyNum = bodyText.split(' ').length;
     var myNum = bodyText.match(new RegExp('\\b(' + input + ')\\b', 'gi')).length;
 
     var per = myNum / bodyNum * 100;
-    per = per.toFixed(2);
+    per = per.toFixed(1);
 
-    document.querySelector('#result').innerText = myNum + '/' + bodyNum + '(' + per + '%)';
+    document.querySelector('#result').innerText = myNum + '/' + bodyNum + "(" + per + '%)';
   });
-})
+}
+
+chrome.storage.sync.get(function (data) {
+  document.querySelector('#userInput').value = data.userWords;
+  matching(data.userWords);
+});
+
+document.querySelector('#userInput').addEventListener('change', function () {
+  var input = document.querySelector('#userInput').value;
+
+  chrome.storage.sync.set({
+    userWords: input
+  });
+  matching(input);
+});
