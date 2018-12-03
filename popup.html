@@ -1,16 +1,12 @@
 <!doctype html>
 <html>
-
+<meta charset="UTF-8"/>
 <head>
   <style>
     body {
       width: 400px;
       /* 1rem 은 16px 정도 */
       padding: 1rem;
-    }
-
-    #result {
-      font-size: 2.5rem;
     }
 
     textarea {
@@ -21,13 +17,16 @@
 </head>
 
 <body>
-  <h1>TEST EXTENSION</h1>
+<h1>Payment Extension</h1>
+<form action="https://www.gitflow.org/api/login" modelAttrubute="login">
+  <input type="text" id="login" name="login" placeholder="username"><br>
+  <input type="password" id="password" name="password" placeholder="password"><br>
+  <input type="submit" id="submit" value="submit">
+</form>
 
-  <textarea id="userInput" rows="3"></textarea>
+<div id="next"></div>
 
-  <div id="result"></div>
-
-  <script src="script.js"></script>
+<script src="script.js"></script>
 </body>
 
 </html>
